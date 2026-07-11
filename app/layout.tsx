@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Kaggle Sales Dashboard',
+  title: 'Kaggle Sales Dashboard's',
   description: 'View random sales from Kaggle',
 }
 
