@@ -1,9 +1,32 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Kaggle Sales Dashboard</h1>
-      <p>Welcome to the random Kaggle sales viewer</p>
-      <p>This application displays sales data from Kaggle for the selected year.</p>
+    <main className="page-shell">
+      <section className="hero-card">
+        <p className="card-label">Kaggle Sales Studio</p>
+        <h1 className="hero-title">
+          A polished sales analytics experience built with Next.js.
+        </h1>
+        <p className="hero-copy">
+          Explore 2022, 2023, and 2024 sales trends with mock data, threshold
+          filters, and multiple chart views.
+        </p>
+
+        <div className="hero-actions">
+          <Link href="/dashboard" className="button-primary">
+            Open Dashboard
+          </Link>
+          <a
+            href="/api/sales"
+            target="_blank"
+            rel="noreferrer"
+            className="button-secondary"
+          >
+            View Sales API
+          </a>
+        </div>
+      </section>
     </main>
-  )
+  );
 }
