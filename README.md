@@ -1,4 +1,4 @@
-# Kaggle Sales Dashboard
+# Kaggle Sales Dashboard's
 
 An app that displays random sales from Kaggle and shows sales data for a selected year.
 
