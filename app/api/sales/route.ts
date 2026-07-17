@@ -1,7 +1,11 @@
 import AdmZip from "adm-zip";
 import { NextResponse } from "next/server";
+import {
+  buildChartSeries,
+  getMockSalesSeries,
+  seriesToPieData,
+} from "@/lib/sales-data";
 
-type SalesPoint = { month: string; sales: number };
 type SalesRecord = Record<string, unknown>;
 
 function parseCsv(text: string) {
@@ -28,7 +32,7 @@ function parseCsv(text: string) {
   });
 }
 
-function normalizeSalesData(payload: unknown): SalesPoint[] {
+function normalizeSalesData(payload: unknown) {
   if (Array.isArray(payload)) {
     return payload
       .map((item) => {
@@ -40,7 +44,8 @@ function normalizeSalesData(payload: unknown): SalesPoint[] {
           record.Month_name ??
           record.date ??
           record.Date ??
-          record.period;
+          record.period ??
+          record.name;
 
         const sales =
           record.sales ??
@@ -63,7 +68,7 @@ function normalizeSalesData(payload: unknown): SalesPoint[] {
           ? { month: String(month), sales: numericSales }
           : null;
       })
-      .filter((item): item is SalesPoint => item !== null);
+      .filter((item): item is { month: string; sales: number } => item !== null);
   }
 
   if (payload && typeof payload === "object") {
@@ -105,7 +110,6 @@ async function tryKaggleDataset(year: string | null) {
     process.env.KAGGLE_API_TOKEN ||
     process.env.SALES_API_KEY ||
     process.env.API_Token;
-
   const kaggleDatasetSlug =
     process.env.KAGGLE_DATASET_SLUG || process.env.SALES_DATASET_SLUG;
   const kaggleDatasetFile = process.env.KAGGLE_DATASET_FILE;
@@ -155,12 +159,23 @@ async function tryKaggleDataset(year: string | null) {
     if (data.length > 0) {
       return {
         year,
+        source: "kaggle",
         data,
         total: data.reduce((sum, item) => sum + item.sales, 0),
+        pieData: seriesToPieData(buildChartSeries(data)),
       };
     }
   } catch (error) {
-    console.error("Kaggle dataset fetch failed", error);
+    const message = error instanceof Error ? error.message : String(error);
+    const isExpectedNetworkIssue =
+      message.includes("fetch failed") ||
+      message.includes("getaddrinfo") ||
+      message.includes("ENOTFOUND") ||
+      message.includes("ETIMEDOUT");
+
+    if (!isExpectedNetworkIssue) {
+      console.error("Kaggle dataset fetch failed", error);
+    }
   }
 
   return null;
@@ -172,28 +187,18 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const year = searchParams.get("year");
 
-  try {
-    const kaggleData = await tryKaggleDataset(year);
+  const kaggleData = await tryKaggleDataset(year);
 
-    if (kaggleData) {
-      return NextResponse.json(kaggleData);
-    }
-
-    return NextResponse.json(
-      {
-        error:
-          "Unable to load sales data. Check your Kaggle credentials and dataset slug in the environment file.",
-      },
-      { status: 500 },
-    );
-  } catch (error) {
-    console.error("Sales API error", error);
-
-    return NextResponse.json(
-      {
-        error: "Unable to load sales data.",
-      },
-      { status: 500 },
-    );
+  if (kaggleData) {
+    return NextResponse.json(kaggleData);
   }
+
+  const mockSeries = getMockSalesSeries(year);
+  return NextResponse.json({
+    year,
+    source: "mock",
+    data: mockSeries,
+    total: mockSeries.reduce((sum, item) => sum + item.sales, 0),
+    pieData: seriesToPieData(mockSeries),
+  });
 }
