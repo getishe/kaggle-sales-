@@ -1,80 +1,80 @@
-# Kaggle Sales Dashboard's
+# Kaggle Sales Dashboard
 
-An app that displays random sales from Kaggle and shows sales data for a selected year.
+A Next.js 15 application that presents yearly sales dashboards for 2022, 2023, and 2024. The app uses mock sales data out of the box and can optionally read from Kaggle through the API route when credentials are provided.
 
-## Features
+## What The Project Does
 
-- Display random sales data from Kaggle
-- Filter sales by year
-- Simple and intuitive UI
+- Shows a landing page and a dashboard page with the App Router
+- Displays yearly sales data for 2022, 2023, and 2024
+- Lets users switch between bar, line, and pie charts
+- Includes a custom sales threshold input
+- Uses a Kaggle-powered API route with a mock-data fallback
 
 ## Tech Stack
 
-- **Framework:** Next.js 14
-- **Language:** TypeScript
-- **Styling:** CSS
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- Recharts
 
-## Getting Started
+## Project Structure
 
-### Local Development
+- `app/page.tsx` for the landing page
+- `app/dashboard/page.tsx` for the dashboard route
+- `app/api/sales/route.ts` for sales data API responses
+- `components/` for reusable UI and chart components
+- `lib/sales-data.ts` for shared mock data and chart helpers
 
-1. Clone the repository:
-```bash
-git clone https://github.com/getishe/kaggle-sales-.git
-cd kaggle-sales-
-```
+## Setup
 
-2. Install dependencies:
+1. Install dependencies:
+
 ```bash
 npm install
 ```
 
-3. Run the development server:
+2. Run the development server:
+
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+3. Open the app:
 
-### Build for Production
+```bash
+http://localhost:3000
+```
+
+## Build
 
 ```bash
 npm run build
 npm start
 ```
 
-## Deployment
+## Optional Kaggle API Setup
 
-This project is configured for deployment on **Vercel**.
+The app works without Kaggle credentials, but if you want the API route to try real Kaggle data, add these environment variables:
 
-### Deploy to Vercel
-
-**Option 1: Using Vercel CLI (Fastest)**
 ```bash
-npm install -g vercel
-vercel
+KAGGLE_USERNAME=your-kaggle-username
+KAGGLE_KEY=your-kaggle-api-key
+KAGGLE_DATASET_SLUG=owner/dataset-slug
+KAGGLE_DATASET_FILE=optional-file-name.csv
 ```
 
-**Option 2: GitHub Integration**
-1. Go to https://vercel.com/new
-2. Click "Import Git Repository"
-3. Paste: `https://github.com/getishe/kaggle-sales-`
-4. Click "Import"
-5. Vercel will auto-detect Next.js and deploy!
+If those values are missing, the API returns the local mock dataset so the dashboard still works.
 
-**Option 3: Dashboard**
-1. Visit https://vercel.com/dashboard
-2. Click "Add New" → "Project"
-3. Select your repository
-4. Click "Deploy"
+## Deployment
 
-Your app will be live at: `https://kaggle-sales-[username].vercel.app`
+The project is ready for Vercel deployment.
 
-## Environment Variables
+1. Push the repository to GitHub
+2. Import the repo in Vercel
+3. Add any optional Kaggle environment variables in the Vercel dashboard
+4. Deploy
 
-Add environment variables in Vercel dashboard:
-- Settings → Environment Variables
+## Notes
 
-## License
-
-MIT
+- The dashboard uses reusable chart components for bar, line, and pie views
+- The data flow is intentionally simple so it is easy to extend with a real API later
