@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Kaggle Sales Dashboard",
-  description: "View random sales from Kaggle",
+  description: "A Next.js 15 sales dashboard with charts, filters, and Kaggle data support",
 };
 
 export default function RootLayout({
