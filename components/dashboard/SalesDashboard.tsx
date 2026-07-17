@@ -22,7 +22,9 @@ export default function SalesDashboard() {
   const [chartType, setChartType] = useState<ChartType>("bar");
   const [threshold, setThreshold] = useState<number>(0);
   const [year, setYear] = useState<string>("2024");
-  const [data, setData] = useState<ChartDatum[]>(() => getMockSalesSeries("2024"));
+  const [data, setData] = useState<ChartDatum[]>(() =>
+    getMockSalesSeries("2024"),
+  );
   const [pieData, setPieData] = useState<PieDatum[]>(() =>
     seriesToPieData(getMockSalesSeries("2024")),
   );
@@ -41,9 +43,12 @@ export default function SalesDashboard() {
       setError(null);
 
       try {
-        const response = await fetch(`/api/sales?year=${encodeURIComponent(year)}`, {
-          cache: "no-store",
-        });
+        const response = await fetch(
+          `/api/sales?year=${encodeURIComponent(year)}`,
+          {
+            cache: "no-store",
+          },
+        );
 
         if (!response.ok) {
           throw new Error(String(response.status));
@@ -56,10 +61,24 @@ export default function SalesDashboard() {
             ? (payload as ChartDatum[])
             : [];
 
-        if (rawItems.length > 0) {
-          setData(rawItems);
-          setPieData(seriesToPieData(rawItems));
-          setSource(typeof payload?.source === "string" ? payload.source : "api");
+        const normalizedItems = rawItems.filter(
+          (item): item is ChartDatum =>
+            typeof item?.month === "string" &&
+            typeof item?.sales === "number" &&
+            Number.isFinite(item.sales),
+        );
+
+        if (normalizedItems.length > 0) {
+          setData(normalizedItems);
+          setPieData(seriesToPieData(normalizedItems));
+          setSource(
+            typeof payload?.source === "string" ? payload.source : "api",
+          );
+        } else {
+          const fallbackSeries = getMockSalesSeries(year);
+          setData(fallbackSeries);
+          setPieData(seriesToPieData(fallbackSeries));
+          setSource("mock");
         }
       } catch (requestError: any) {
         setError(requestError?.message ?? String(requestError));
@@ -81,14 +100,19 @@ export default function SalesDashboard() {
         <div className="dashboard-header panel">
           <p className="card-label">Sales Dashboard</p>
           <h1 className="dashboard-title">Kaggle Sales Studio</h1>
-          <p className="dashboard-subtitle">Choose a year, set a minimum sales threshold, and switch between chart types to compare 2022, 2023, and 2024.</p>
+          <p className="dashboard-subtitle">
+            Choose a year, set a minimum sales threshold, and switch between
+            chart types to compare 2022, 2023, and 2024.
+          </p>
         </div>
 
         <div className="stats-grid">
           <StatCard
             title="Total Sales"
             value={`$${summary.total.toLocaleString()}`}
-            trend={source === "kaggle" ? "Live Kaggle data" : "Mock data fallback"}
+            trend={
+              source === "kaggle" ? "Live Kaggle data" : "Mock data fallback"
+            }
           />
           <StatCard
             title="Average Monthly"
@@ -130,11 +154,13 @@ export default function SalesDashboard() {
           <div className="flex items-center justify-between gap-3 mb-4">
             <h2 className="chart-title">Sales Trend</h2>
             <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
-              Current view: {chartType.charAt(0).toUpperCase() + chartType.slice(1)}
+              Current view:{" "}
+              {chartType.charAt(0).toUpperCase() + chartType.slice(1)}
             </span>
           </div>
           <p className="mb-4 text-sm text-gray-600">
-            Showing sales for {year} with a {chartType} chart. Try a threshold like 400000 to focus on stronger months.
+            Showing sales for {year} with a {chartType} chart. Try a threshold
+            like 400000 to focus on stronger months.
           </p>
           {loading && <div>Loading...</div>}
           {error && <div className="text-red-500">Error: {error}</div>}
@@ -177,4 +203,3 @@ export default function SalesDashboard() {
     </div>
   );
 }
-

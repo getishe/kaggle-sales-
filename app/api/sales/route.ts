@@ -64,11 +64,16 @@ function normalizeSalesData(payload: unknown) {
         if (month === undefined || sales === undefined) return null;
 
         const numericSales = Number(sales);
-        return Number.isFinite(numericSales)
-          ? { month: String(month), sales: numericSales }
-          : null;
+        if (!Number.isFinite(numericSales)) return null;
+
+        return {
+          month: String(month).trim() || "Unknown",
+          sales: Math.max(0, numericSales),
+        };
       })
-      .filter((item): item is { month: string; sales: number } => item !== null);
+      .filter(
+        (item): item is { month: string; sales: number } => item !== null,
+      );
   }
 
   if (payload && typeof payload === "object") {
