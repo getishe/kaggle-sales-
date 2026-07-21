@@ -1,4 +1,4 @@
-# Kaggle Sales Dashboard
+## Kaggle Sales Dashboard 
 
 A Next.js 15 application that presents yearly sales dashboards for 2022, 2023, and 2024. The app uses mock sales data out of the box and can optionally read from Kaggle through the API route when credentials are provided.
 
