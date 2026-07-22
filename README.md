@@ -3,7 +3,7 @@
 A Next.js 15 application that presents yearly sales dashboards for 2022, 2023, and 2024. The app uses mock sales data out of the box and can optionally read from Kaggle through the API route when credentials are provided.
 
 ## What The Project Does
-
+-let user access the dashboard based user input 
 - Shows a landing page and a dashboard page with the App Router
 - Displays yearly sales data for 2022, 2023, and 2024
 - Lets users switch between bar, line, and pie charts
