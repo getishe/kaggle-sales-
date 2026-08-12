@@ -72,7 +72,7 @@ The project is ready for Vercel deployment.
 1. Push the repository to GitHub
 2. Import the repo in Vercel
 3. Add any optional Kaggle environment variables in the Vercel dashboard
-4. Deploy
+4. Deploy on vercel
 
 ## Notes
 
