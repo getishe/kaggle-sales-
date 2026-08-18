@@ -4,7 +4,7 @@ interface FilterInputProps {
   value: number;
   onThresholdChange: (value: number) => void;
 }
-
+// filter inputsProps 
 //filter 
 // filter inputsProps
 // filter based on the input
