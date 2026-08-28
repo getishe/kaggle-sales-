@@ -1,7 +1,7 @@
 "use client";
 
 type ChartType = "bar" | "line" | "pie";
-//Check availability included 
+//Check availability included myproblem
 interface ChartTypeSelectorProps {
   chartType: ChartType;
   onChartTypeChange: (type: ChartType) => void;
