@@ -3,7 +3,7 @@ interface StatCardProps {
   value: string;
   trend: string;
 }
-
+// check the title value trend 
 export default function StatCard({ title, value, trend }: StatCardProps) {
   return (
     <div className="card">
