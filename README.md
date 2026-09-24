@@ -6,7 +6,7 @@ A Next.js 15 application that presents yearly sales dashboards for 2022, 2023, a
 -let user access the dashboard based user input's needed 
 - Shows a landing page and a dashboard page with the App Router
 - Displays yearly sales data for 2022, 2023, and 2024
-- Lets users switch between bar, line, and pie charts
+9- Lets users switch between bar, line, and pie charts
 - Includes a custom sales threshold input
 - Uses a Kaggle-powered API route with a mock-data fallback
 
@@ -65,7 +65,7 @@ KAGGLE_DATASET_FILE=optional-file-name.csv
 
 If those values are missing, the API returns the local mock dataset so the dashboard still works.
 
-## Deployment
+## Deployment test 
 
 The project is ready for Vercel deployment.
 
