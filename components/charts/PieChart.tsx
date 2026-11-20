@@ -15,7 +15,7 @@ interface PieChartProps {
 
 export default function PieChartComponent({ data = [] }: PieChartProps) {
   return (
-    <div className="h-80 w-full">
+    <div className="chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
